@@ -11,7 +11,7 @@ import scipy.sparse as sp
 from sklearn.model_selection import train_test_split
 
 from pcgr_utils import norm_adj, accuracy, set_seed, load_data, sparse_mx_to_torch_sparse_tensor, \
-    pcgr_, set_train_val_test_split, pcgr_large_preprocess
+    pcgr_, set_train_val_test_split, pcgr_large_preprocess, test_seeds
 from pcgr_models import lwpcgr
 
 os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
@@ -103,6 +103,7 @@ def run(args, dataname, gs, full, random_split, i):
             test_acc = tmp_test_acc
             bad_epoch = 0
             # hlw = model.hlw.data.cpu()
+            torch.save(logits, "/home/user/duan/curvature_path/LWPCGR/outputs/cite_pcgr.pkl")
         else:
             bad_epoch += 1
         if bad_epoch == args.patience:
@@ -185,8 +186,15 @@ results = []
 time_results = []
 all_test_accs = []
 
+if args.random_split:
+    runs = args.runs
+    seeds = range(0, 10)
+else:
+    runs = 100
+    seeds = test_seeds
+
 for i in tqdm.tqdm(range(args.runs)):
-    test_acc, best_val_loss, run_time = run(args, args.dataset, gs, args.full, args.random_split, i)
+    test_acc, best_val_loss, run_time = run(args, args.dataset, gs, args.full, args.random_split, seeds[i])
     time_results.append(run_time)
     all_test_accs.append(test_acc.item())  #
     print(f'run_{str(i + 1)} \t test_acc: {test_acc:.4f}')
