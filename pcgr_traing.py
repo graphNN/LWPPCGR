@@ -103,7 +103,7 @@ def run(args, dataname, gs, full, random_split, i):
             test_acc = tmp_test_acc
             bad_epoch = 0
             # hlw = model.hlw.data.cpu()
-            torch.save(logits, "/home/user/duan/curvature_path/LWPCGR/outputs/cite_pcgr.pkl")
+            #torch.save(logits, "/home/user/duan/curvature_path/LWPCGR/outputs/cite_pcgr.pkl")
         else:
             bad_epoch += 1
         if bad_epoch == args.patience:
@@ -120,7 +120,7 @@ parser.add_argument('--dataset', type=str, default='citeseer',
 parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs to train.')
 parser.add_argument('--patience', type=int, default=200, help='Patience')
 parser.add_argument('--device', type=int, default=0, help='GPU device.')
-parser.add_argument('--runs', type=int, default=10, help='number of runs.')
+parser.add_argument('--runs', type=int, default=3, help='number of runs.')
 parser.add_argument('--activation', type=bool, default=True)
 parser.add_argument('--full', type=bool, default=True, help='Whether full-supervised')
 parser.add_argument('--random_split', type=bool, default=True, help='Whether random split')
